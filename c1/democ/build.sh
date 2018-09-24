@@ -1,0 +1,1 @@
+gcc -Wall democ.c backend.c lex.c parse.c error.c -o democ
