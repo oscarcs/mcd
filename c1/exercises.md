@@ -17,8 +17,31 @@ Object -> Noun_Phrase
 Noun_Phrase -> Noun_Compound | Personal_Name | Personal_Pronoun
 Noun_Compound -> Article? Adjective_Sequence? Noun
 ```
-a) *What is the parse tree for the sentence `I see you`, in which `I` and `you` are terminal productions of `Personal_Pronoun` and `see` is a terminal production of `Verb`?
+a) *What is the parse tree for the sentence `I see you`, in which `I` and `you` are terminal productions of `Personal_Pronoun` and `see` is a terminal production of `Verb`?*
 
+```
+                   Sentence
+             Subject Verb Object
+        Noun_Phrase    |     Noun_Phrase
+Personal_Pronoun       |        Personal_Pronoun
+      I               see             you
+```
 
+b) *What would be a sensible AST for this parse tree?*
+```
+    see
+  /    \  
+I       you
+```
 
-b) What would be a sensible AST for this parse tree?
+1.10 *Is the compiler implemented in Chapter 1 a 'narrow' or 'broad' compiler?*
+
+The compiler in Chapter 1 is a narrow compiler, because it applies transformations iteratively by transforming parts of the program.
+
+1.13 *What is an 'extended subset' of a language? Why is the term usually used in a perjorative sense?*
+
+An 'extended subset' is a subset of the features of the language that have been augmented by more features that are not part of the specification. It is usually used pejoratively to disparage someone who is too lazy to implement the entire language properly.
+
+1.18 *Why would it be considered bad design to have a terminal symbol with an empty representation?*
+
+This would be considered bad design because any use of the empty string symbol could be replaced by other ways of conveying the same information that are clearer. For example, we could use the 'optionality' symbol of EBNF, '?', to represent the scenario when e.g. `non-terminal -> terminal | ε`
