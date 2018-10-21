@@ -60,4 +60,34 @@ For different types of tokens, often the input will be from a finite set and the
 
 ### 2.6 Creating a lexical analyzer automatically
 
-We can also generate a lexical analyzer.
+We can also generate a lexical analyzer. The textbook describes the techniques behind this in detail. I have no particular interest in writing a lexer generator, so I have skipped this section for now. (For writing programming language lexers, such a degree of generality is unnecessary.)
+
+### 2.7 Transition table compression
+
+Transition tables in lexical analysers are not ordinary, arbitrary matrices. They exhibit a high degree of structure. When a token is being recognized, only very few characters will continue that token, so most entries in the table are empty.
+
+- A low density transition table is called *sparse*. Densities of less than 5% are not unusual.
+
+#### 2.7.1 Table compression by row displacement
+
+The first algorithm that we will look at to compress a transition table is called the *row displacement* algorithm. We use this algorithm to get rid of all of the empty entries in the table. Essentially, we cut the 2D transition matrix up into 'strips', and paste those strips together into an overlapping 1D array. We can then translate from this 1D array back to the 2D array while still getting extremely fast lookup times.
+
+The textbook doesn't do a great job of conceptually explaining this. The diagram below is an explanation of the algorithm from the perspective of message dispatching tables for dynamically-typed languages. It appears in *Minimizing Row Displacement Dispatch Tables* (Driesen & Hölzle, 1995).
+
+![row displacement](../res/row_displacement.png)
+
+The diagram shows a class hierarchy. Each uppercase letter is a class, and each class understands the messages given in lowercase at its own node and at all of its parent nodes. Class D objects, for instance, understand messages a, g, c, f, and e. Provided this structure is fixed at runtime, we can precalculate it into a table. This table can then be translated into a compressed 1D array with few empty elements.
+
+We can perform the compression by shifting each row a different amount until there is only one occupied entry on each column and then collapsing that structure down into a 1D array. Unfortunately, the process of finding the row displacements is an NP-complete problem. We have to resort to heuristics to find good (but sub-optimal) solutions.
+
+One good heuristic is to sort the rows according to density, with the most dense first, and then we find the first place that each row fits.
+
+#### 2.7.2 Table compression by graph coloring
+
+*Graph coloring* is another technique to achieve the same goal. In this approach, we select a subset S from the total set of rows, such that we can combine all rows in S without displacement or conflict; they can all be placed in the same location.
+
+- In a large-enough table we can find many such subsets that result in packings without any empty entries, an optimal packing.
+
+The sets are determined by first constructing and then coloring a so-called *interference graph*, a graph in which each row is a node, and in which there is an egde between each pair of rows that cannot co-exist because of conflicts.
+
+We can then color the graph (almost) optimally by assigning colors to each of its nodes such that no two nodes that are connected by an edge have the same color. This is an NP-complete problem, but we have good heuristic algorithms to find the minimal number of colors needed to fulfill the condition. These heuristics will be covered later.
