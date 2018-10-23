@@ -91,3 +91,35 @@ One good heuristic is to sort the rows according to density, with the most dense
 The sets are determined by first constructing and then coloring a so-called *interference graph*, a graph in which each row is a node, and in which there is an egde between each pair of rows that cannot co-exist because of conflicts.
 
 We can then color the graph (almost) optimally by assigning colors to each of its nodes such that no two nodes that are connected by an edge have the same color. This is an NP-complete problem, but we have good heuristic algorithms to find the minimal number of colors needed to fulfill the condition. These heuristics will be covered later.
+
+### 2.8 Error handling in lexical analysers
+
+This section discusses error handling. Mostly it points out that there should be additional regular expressions in the lexer to cover common patterns in incorrect programs.
+
+### 2.9 A traditional lexer analyzer generator—lex
+
+*Lex* is a classic UNIX program that generates lexers. Lex files are divided into three sections:
+
+- The definition section defines macros and imports header files written in C.
+- The rules section associates regular expression patterns with C statements.
+- The C code section contains C statemenets and functions that are copied to the generated source file.
+
+Lex generates a function, yylex(), which can be called to lex tokens. yylex() contains a loop which will continue lexing tokens until a return statement is encountered.
+
+### 2.10 Lexical identification of tokens
+
+In a cleanly-designed compiler, the only job of a lexical analyzer is to isolate the text of a token and identify the token class. The lexer should yield a stream of (token class, token representation) pairs. However, there are instances when the lexical analyzer might be the best place to do certain types of computations: for example, converting a numeric literal in octal or hexadecimal format into a stored integer.
+
+The *lexer hack* is an example of this phenomenon. In C, classifying a sequence of characters as a variable name or as a type name requires contextual information, which prevents the lexer from being context free. For example:
+
+```
+(A)*B
+```
+
+could be multiplication of two variables, or it could be casting `*B` to type `A`.
+
+Because of bad language design of this sort, we have to break the clean design of our lexers. Another example is macros: do we do macro processing before we perform lexical analysis, or do we integrate macro expansion into the lexer?
+
+Another consideration is keywords. Most languages have a set of reserved words that look like identifiers but in fact serve a syntactic purpose.
+
+In order to solve the above problems, it is often a good idea to do some identifier identification in the lexical analyzer, just enough to serve the purposes of the lexical analyzer and the parser. Effectively, we introduce a separate phase between the lexical analyzer and the parser, which we call the *lexical identification phase* or *screening*.
