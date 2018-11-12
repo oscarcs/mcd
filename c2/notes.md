@@ -123,3 +123,20 @@ Because of bad language design of this sort, we have to break the clean design o
 Another consideration is keywords. Most languages have a set of reserved words that look like identifiers but in fact serve a syntactic purpose.
 
 In order to solve the above problems, it is often a good idea to do some identifier identification in the lexical analyzer, just enough to serve the purposes of the lexical analyzer and the parser. Effectively, we introduce a separate phase between the lexical analyzer and the parser, which we call the *lexical identification phase* or *screening*.
+
+### 2.11 Symbol tables
+
+A *symbol table* (or *name list*) is a mapping from an identifier onto an associated record which contains collected information about the identifier. The name 'symbol table' derives from the fact that identifiers are also called 'symbols', and that the mapping is often implemented using a hash table.
+
+The primary interface of a symbol table is a single function, taking a name as input and returning a pointer to information about that name.
+
+### 2.12 Macro processing and file inclusion
+
+*This section of the textbook mainly concerns C-style textual-replacement macros, which can be powerful but are annoying to implement and use. I have no interest in writing a C compiler, so I have skipped most of this chapter. Haxe, for example, includes macros as part of its ordinary syntax; macro expressions modify the AST at compile-time.*
+
+A *macro definition* identifies an indentifier as being a macro and having a certain string as a value. When the identifier is encountered in the program text, its string value is to be substituted in its place. A macro definition can have parameters, which can be substituted in its place.
+
+Apart from macro substitution and parameter substitution, some languages define a third type of macro, file inclusion. A file inclusion directive contains a filename, which is retrieved from the system and substituted into the file inclusion directive.
+
+Another type of macro to consider are macros for conditional compilation. A condition is evaluated at compile-time and the enclosed block of code is included (or not) as part of the subsequent compilation.
+
