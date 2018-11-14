@@ -31,3 +31,11 @@ This is probably wrong because semantically newlines and spaces mean different t
 > This is similar to part 1, but we can have any even number instead of just 2:
 > 
 > `/0*(10*10*)*0*/`
+
+2.7 *Why would the dot pattern `.` exclude the newline?*
+
+The newline isn't matched by the dot supposedly for mostly historical reasons; the origin of newline characters in ASCII and other character encodings is as a control character rather than as a character for typesetting; most editors were line-based, so the regex would be applied to the file line-by-line. This still makes sense as a default, because the newline is still used for this kind of purpose in many contexts. 
+
+2.8 *What does the regular expression `a?*` mean? And `a**`? Are these expressions erroneous? Are they ambiguous?*
+
+These expressions are not valid, because they are ambiguous. The expressions `(a?)*` and `(a*)*` are valid, however, because they are not ambiguous. Quantifiers must act on a group or a character.
