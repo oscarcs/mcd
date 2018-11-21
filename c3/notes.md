@@ -31,3 +31,11 @@ The bottom-up process of parsing constructs the nodes in the syntax tree in post
 
 ![bottom up parsing](../res/bottom_up_parsing.png)
 
+### 3.2 Error detection and error recovery
+
+One thing to consider is when a user makes a syntax error. We actually want to be able to continue parsing the rest of the program in order to give the user all of the errors at once so they can fix them in one go before recompiling. In order to accomplish this, we need to be able to detect syntax errors and then recover from them, continuing to parse the rest of the program.
+
+There are two strategies for error recovery: 
+
+- *Error correction*, in which we fix up the parse tree and then continue parsing; this can cause many spurious error messages if the parse tree is broken in a particularly annoying way.
+- *Non-correcting error recovery*, in which we discard all of the parser information and continue parsing the program using a special grammar for 'rest of program', called the *suffix grammar*. This produces reliable error messages but is harder to implement.
