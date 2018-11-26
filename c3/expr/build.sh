@@ -1,0 +1,1 @@
+gcc -Wall expr.c -o expr
