@@ -1,1 +1,1 @@
-gcc -Wall expr.c -o expr
+gcc -Wall -g expr.c -o expr
