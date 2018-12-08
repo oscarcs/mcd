@@ -39,3 +39,11 @@ There are two strategies for error recovery:
 
 - *Error correction*, in which we fix up the parse tree and then continue parsing; this can cause many spurious error messages if the parse tree is broken in a particularly annoying way.
 - *Non-correcting error recovery*, in which we discard all of the parser information and continue parsing the program using a special grammar for 'rest of program', called the *suffix grammar*. This produces reliable error messages but is harder to implement.
+
+### 3.3 Creating a top-down parser manually
+
+Given a non-terminal symbol `N` and a token `t` at position `p` in the input, the job of a top-down parser is to decide which alternative of `N` must be applied to create the correct subtree headed by `N` at position `p`. A *recursive-descent* parser checks all the possible subtrees in sequence and considers the first valid one to be correct.
+
+One of the major advantages of recursive-descent parsing is that it can be written using code that is remarkably similar in structure to the structure of the grammar being parsed. Each function in the code corresponds to a rule in the grammar.
+
+However, recursive-descent parsing cannot accept left-recursive parsers, which is a serious disadvantage, because many programming languages are left-recursive in places.
