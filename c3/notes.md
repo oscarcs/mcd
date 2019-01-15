@@ -46,4 +46,11 @@ Given a non-terminal symbol `N` and a token `t` at position `p` in the input, th
 
 One of the major advantages of recursive-descent parsing is that it can be written using code that is remarkably similar in structure to the structure of the grammar being parsed. Each function in the code corresponds to a rule in the grammar.
 
-However, recursive-descent parsing cannot accept left-recursive parsers, which is a serious disadvantage, because many programming languages are left-recursive in places.
+However, recursive-descent parsing cannot accept left-recursive parsers, which is a serious disadvantage, because many programming languages are left-recursive in places. Recall the definition of a left-recursive grammar: one where an intermediate form `N` can be made into another intermediate form also starting with `N`. For example, `A -> Aa` is a left-recursive rule. Consider what the top-down recursive-descent code to parse this rule would look like:
+```c
+void A() {
+    A();
+    expect(a);
+}
+```
+Obviously, this is an infinite loop and `A()` will be called until the stack overflows.
